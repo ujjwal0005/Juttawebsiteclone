@@ -128,21 +128,13 @@ currentproductsize.forEach((size,index)=>{
     })
 });
 
-const productbutton = document.querySelector(".productbutton");
+const productbutton = document.querySelector(".proudctbutton");
 const payment = document.querySelector(".payment");
 const close = document.querySelector(".close");
 
-productbutton.addEventListener("click",()=> {
-    // payment.style.display = "flex";
-    console.log("hello")
-  });
-  
-  close.addEventListener("click", () => {
-    payment.style.display = "none";
-  });
-// productbutton.addEventListener("click",()=>{
-//     payment.style.display = "flex"
-// })
-// close.addEventListener("click",()=>{
-//     payment.style.display = "none"
-// })
+productbutton.addEventListener("click",()=>{
+  payment.style.display="flex"
+})
+close.addEventListener("click",()=>{
+  payment.style.display="none"
+})
