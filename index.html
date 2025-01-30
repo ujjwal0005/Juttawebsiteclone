@@ -10,7 +10,6 @@
     <style>
         body {
             margin: 0;
-            overflow: hidden;
             font-family: 'Fira Code', monospace;
             color: #c9d1d9;
             background-color: #0d1117;
@@ -28,7 +27,8 @@
             z-index: 2;
             text-align: center;
             padding-top: 10vh;
-            min-height: 100vh;
+            padding-bottom: 10vh;
+            /* min-height: 100vh; */
         }
 
         h1 {
@@ -36,13 +36,13 @@
             margin: 0;
             cursor: pointer;
             transition: all 0.3s;
-            text-shadow: 2px 2px 0 #ff0000, 
-                         4px 4px 0 #00ff00, 
-                         6px 6px 0 #0000ff;
+            text-shadow: 2px 2px 0 #e0e0e0, 
+                         4px 4px 0 #858484, 
+                         6px 6px 0 #777777;
         }
 
         h1:hover {
-            color: #58a6ff;
+            color: #6c6c6d;
             transform: scale(1.05);
         }
 
@@ -55,14 +55,9 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 30px rgba(88, 166, 255, 0.2);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.5s ease-out;
-        }
-
-        .terminal.active {
-            opacity: 1;
+            opacity: 1; /* Terminal visible by default */
             transform: translateY(0);
+            transition: all 0.5s ease-out;
         }
 
         .terminal-header {
@@ -159,7 +154,7 @@
         }
 
         footer {
-            position: fixed;
+            /* position: fixed; */
             bottom: 0;
             left: 0;
             width: 100%;
@@ -199,22 +194,29 @@
 
         .blog-cards {
             position: relative;
-            z-index: 2; /* Ensure it's above the background */
+            z-index: 2;
             text-align: center;
             padding: 20px;
             max-width: 1200px;
+            padding-bottom: 5vh;
             margin: 0 auto;
-            /* display: none; Hidden by default */
+            display: none; /* Hidden by default */
         }
-        
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
         .cards-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 70px;
             justify-content: center;
             margin-top: 20px;
+            max-height: 99vh;
+            overflow-y: auto;
         }
-        
+
         .blog-card {
             background: rgba(22, 27, 34, 0.95);
             border-radius: 10px;
@@ -223,40 +225,47 @@
             box-shadow: 0 0 30px rgba(88, 166, 255, 0.2);
             transition: transform 0.3s, box-shadow 0.3s;
             cursor: pointer;
+            position: relative;
         }
-        
+
         .blog-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 40px rgba(88, 166, 255, 0.3);
         }
-        
+
         .blog-card img {
             width: 100%;
             border-radius: 10px;
             margin-bottom: 15px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
         }
-        
+
         .blog-card h5 {
             font-size: 0.9em;
             margin: 10px 0;
-            /* color: #58a6ff; */
             text-align: left;
         }
-        
+
         .blog-card p {
             font-size: 0.9em;
             color: #8b949e;
             line-height: 1.4;
             text-align: left;
         }
-        
+
         .blog-card a {
             color: #58a6ff;
             text-decoration: none;
             font-weight: bold;
+            font-size: 14px;
             text-align: left;
+            position: absolute;
+            bottom: 14px;
+            right: 14px;
         }
-        
+
         .blog-card a:hover {
             text-decoration: underline;
         }
@@ -265,13 +274,13 @@
 <body>
     <canvas id="bg"></canvas>
     <div class="blog-cards" id="blog-cards">
-        <h1 onclick="toggleTerminal()" class="glow">Medium Blogs</h1>
+        <h1 onclick="toggleContent(false)" class="glow">Medium Blogs</h1>
         <div class="cards-container" id="cards-container">
             <!-- Blog cards will be dynamically inserted here -->
         </div>
     </div>
     <div class="content">
-        <h1 onclick="toggleTerminal()" class="glow">UJJWAL SAPKOTA (DevOps Engineer)</h1>
+        <h1 onclick="toggleContent(true)" class="glow">UJJWAL SAPKOTA (DevOps Engineer)</h1>
         <div class="tech-stack">
             <i class="fab fa-docker tech-icon" title="Docker"></i>
             <i class="fab fa-kubernetes tech-icon" title="Kubernetes"></i>
@@ -311,7 +320,7 @@
             <a href="https://www.linkedin.com/in/ujjwalsapkotadev/" target="_blank">
                 <i class="fab fa-linkedin"></i> LinkedIn
             </a>
-            <a href="https://medium.com/@ujjwalsapkota005" target="_blank">
+            <a href="https://medium.com/@ujjwalsapkota005" target="_blank" onclick="toggleContent(true)">
                 <i class="fab fa-medium"></i> Medium
             </a>
             <a href="mailto:ujjwalsapkota005@gmail.com">
@@ -324,12 +333,28 @@
     </footer>
 
     <script>
+        // Function to toggle between Ujjwal Sapkota content and Medium Blogs
+        function toggleContent(showBlogs) {
+            const content = document.querySelector('.content');
+            const blogCards = document.getElementById('blog-cards');
+
+            if (showBlogs) {
+                content.style.display = 'none'; // Hide Ujjwal Sapkota content
+                blogCards.style.display = 'block'; // Show Medium Blogs
+            } else {
+                content.style.display = 'block'; // Show Ujjwal Sapkota content
+                blogCards.style.display = 'none'; // Hide Medium Blogs
+            }
+        }
+
+        // Initialize the page with Ujjwal Sapkota content and terminal visible
+        toggleContent(false);
+
         // Terminal functionality
         const output = document.getElementById("output");
         const inputField = document.getElementById("input");
         const terminal = document.getElementById("terminal");
         const terminalContent = document.getElementById("terminal-content");
-        const blogCards = document.getElementById("blog-cards");
 
         let commandHistory = [];
         let historyIndex = -1;
@@ -345,7 +370,7 @@ clear    - Clear terminal
 system   - Show system information
 whoami   - Display current user
 date     - Show current date and time`,
-            
+
             "about": `Ujjwal Sapkota
 DevOps Engineer
 ─────────────────────
@@ -353,7 +378,7 @@ DevOps Engineer
 🌟 3+ years of experience in DevOps practices
 🎯 Specialized in Kubernetes and Cloud Native technologies
 🌱 Currently learning AI/ML Operations`,
-            
+
             "skills": `Technical Skills
 ───────────────
 Containers & Orchestration: Docker, Kubernetes
@@ -364,7 +389,7 @@ Monitoring & Logging: Prometheus, Grafana,Nagios, New Relic
 Languages: Python, Bash, YAML, JSON, PHP, Laravel, Django
 Security: CIS Benchmarking, Secure SSH, Firewall Management, Access Control
 VOIP: Asterisk,FreePbx,Yeastar`,
-            
+
             "projects": `Recent Projects
 ───────────────
 1. Kubernetes Cluster Automation
@@ -378,14 +403,14 @@ VOIP: Asterisk,FreePbx,Yeastar`,
 3. CI/CD Pipeline Optimization
    - Reduced build time from 45 to 12 minutes
    - Implemented parallel testing`,
-            
+
             "contact": `Contact Information
 ─────────────────
 📧 Email: <a class="warning" href="mailto:ujjwalsapkota005@gmail.com">ujjwalsapkota005@gmail.com</a>
 🌐 Website: <a class="warning" href="https://medium.com/@ujjwalsapkota005" target="_blank">medium.com/@ujjwalsapkota005</a>
 💼 LinkedIn: <a class="warning" href="https://www.linkedin.com/in/ujjwalsapkotadev/" target="_blank">linkedin.com/in/ujjwalsapkotadev</a>
 📱 GitHub: <a class="warning" href="https://github.com/ujjwal0005" target="_blank">github.com/ujjwal0005</a>`,
-            
+
             "system": `System Information
 ─────────────────
 OS: DevOps Portfolio OS
@@ -394,11 +419,11 @@ Shell: bash 5.1.16
 Terminal: portfolio.ujjwal.dev
 CPU: Brain 12900K
 Memory: 32GB Knowledge`,
-            
+
             "whoami": "Ujjwal Sapkota",
-            
+
             "date": () => new Date().toLocaleString(),
-            
+
             "clear": "CLEAR"
         };
 
@@ -447,17 +472,6 @@ Memory: 32GB Knowledge`,
             }
         });
 
-        function toggleTerminal() {
-            if (terminal.classList.contains("active")) {
-                terminal.classList.remove("active");
-                blogCards.style.display = "block";
-                fetchMediumBlogs(); // Fetch blogs when switching to blog view
-            } else {
-                terminal.classList.add("active");
-                blogCards.style.display = "none";
-            }
-        }
-
         function closeTerminal() {
             terminal.classList.remove("active");
         }
@@ -480,7 +494,7 @@ Memory: 32GB Knowledge`,
             try {
                 const response = await fetch(mediumRSSFeed);
                 const data = await response.json();
-                const blogs = data.items;
+                const blogs = data.items.slice(0, 9);
 
                 // Clear existing cards
                 cardsContainer.innerHTML = "";
@@ -489,9 +503,17 @@ Memory: 32GB Knowledge`,
                 blogs.forEach(blog => {
                     const card = document.createElement("div");
                     card.className = "blog-card";
+
+                    // Extract image (if `thumbnail` exists, use it, otherwise extract from `content`)
+                    let imageUrl = blog.thumbnail || extractImageFromContent(blog.content);
+
+                    // Extract only text for <p>
+                    let textContent = extractTextFromContent(blog.content);
+
                     card.innerHTML = `
                         <h5>${blog.title}</h5>
-                        <p>${blog.description.substring(0, 100)}...</p>
+                        <img class="img" src="${imageUrl}" alt="Blog Image">
+                        <p>${textContent.substring(0, 100)}...</p>
                         <a href="${blog.link}" target="_blank">Read More</a>
                     `;
                     cardsContainer.appendChild(card);
@@ -502,9 +524,31 @@ Memory: 32GB Knowledge`,
             }
         }
 
+        // Function to extract image from content
+        function extractImageFromContent(content) {
+            const tempDiv = document.createElement("div");
+            tempDiv.innerHTML = content;
+            const imgTag = tempDiv.querySelector("img");
+            return imgTag ? imgTag.src : "default-image.jpg"; // Use a fallback image if none found
+        }
+
+        // Function to extract only text from content (remove images)
+        function extractTextFromContent(content) {
+            const tempDiv = document.createElement("div");
+            tempDiv.innerHTML = content;
+
+            // Remove all images
+            tempDiv.querySelectorAll("img").forEach(img => img.remove());
+
+            return tempDiv.textContent.trim(); // Return clean text
+        }
+
+        // Call the function
+        fetchMediumBlogs();
+
         // Three.js background
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("bg"), alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -513,7 +557,7 @@ Memory: 32GB Knowledge`,
         const particlesCount = 2000;
         const posArray = new Float32Array(particlesCount * 3);
 
-        for(let i = 0; i < particlesCount * 3; i++) {
+        for (let i = 0; i < particlesCount * 3; i++) {
             posArray[i] = (Math.random() - 0.5) * 10;
         }
 
@@ -531,8 +575,8 @@ Memory: 32GB Knowledge`,
 
         // Mouse interaction
         document.addEventListener('mousemove', (e) => {
-            particlesMesh.rotation.x = (e.clientY/window.innerHeight - 0.5) * 0.2;
-            particlesMesh.rotation.y = (e.clientX/window.innerWidth - 0.5) * 0.2;
+            particlesMesh.rotation.x = (e.clientY / window.innerHeight - 0.5) * 0.2;
+            particlesMesh.rotation.y = (e.clientX / window.innerWidth - 0.5) * 0.2;
         });
 
         function animate() {
@@ -548,9 +592,6 @@ Memory: 32GB Knowledge`,
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
-
-        // Initialize terminal
-        toggleTerminal();
     </script>
 </body>
 </html>
