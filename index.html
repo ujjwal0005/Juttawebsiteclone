@@ -233,7 +233,7 @@
 <body>
     <canvas id="bg"></canvas>
     <div class="content">
-        <h1 onclick="toggleTerminal()" class="glow">UJJWAL SAPKOTA</h1>
+        <h1 onclick="toggleTerminal()" class="glow">UJJWAL SAPKOTA (DevOps Engineer)</h1>
         <div class="tech-stack">
             <i class="fab fa-docker tech-icon" title="Docker"></i>
             <i class="fab fa-kubernetes tech-icon" title="Kubernetes"></i>
@@ -254,7 +254,7 @@
             </div>
             <div class="terminal-content" id="terminal-content">
                 <div class="output-line success">Welcome to Ujjwal's DevOps Terminal v1.0.0</div>
-                <div class="output-line">Type 'help' to see available commands</div>
+                <div class="output-line">Type 'hello' to see available commands</div>
                 <div id="output"></div>
                 <div class="input-line">
                     <span class="prompt">$</span>
@@ -296,8 +296,8 @@
         let historyIndex = -1;
 
         const commands = {
-            "help": `Available commands:
-help     - Show this help message
+            "hello": `Available commands:
+hello     - Show this help message
 about    - About Ujjwal Sapkota
 skills   - List technical skills
 projects - View recent projects
@@ -308,22 +308,23 @@ whoami   - Display current user
 date     - Show current date and time`,
             
             "about": `Ujjwal Sapkota
-Senior DevOps Engineer
+DevOps Engineer
 ─────────────────────
 🚀 Passionate about automating everything
-🌟 5+ years of experience in DevOps practices
+🌟 3+ years of experience in DevOps practices
 🎯 Specialized in Kubernetes and Cloud Native technologies
 🌱 Currently learning AI/ML Operations`,
             
             "skills": `Technical Skills
 ───────────────
-• Container Orchestration: Kubernetes, Docker
-• Cloud Platforms: AWS, GCP
-• Infrastructure as Code: Terraform, CloudFormation
-• CI/CD: Jenkins, GitLab CI, GitHub Actions
-• Configuration Management: Ansible, Chef
-• Monitoring: Prometheus, Grafana
-• Programming: Python, Bash, Go`,
+Containers & Orchestration: Docker, Kubernetes
+Infrastructure as Code: Terraform, Ansible
+Cloud Platforms: AWS
+CI/CD: Jenkins, GitLab CI, AWS CodePipeline, Github Actions
+Monitoring & Logging: Prometheus, Grafana,Nagios, New Relic
+Languages: Python, Bash, YAML, JSON, PHP, Laravel, Django
+Security: CIS Benchmarking, Secure SSH, Firewall Management, Access Control
+VOIP: Asterisk,FreePbx,Yeastar`,
             
             "projects": `Recent Projects
 ───────────────
