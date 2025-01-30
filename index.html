@@ -7,8 +7,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/framer-motion/10.16.1/framer-motion.umd.min.js"></script>
-
     <style>
         body {
             margin: 0;
@@ -199,39 +197,79 @@
             color: #8b949e;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+        .blog-cards {
+            position: relative;
+            z-index: 2; /* Ensure it's above the background */
+            text-align: center;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            /* display: none; Hidden by default */
         }
-
-        .footer-content a:hover i {
-            animation: float 1.5s infinite;
+        
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
         }
-
-        ::-webkit-scrollbar {
-            width: 8px;
+        
+        .blog-card {
+            background: rgba(22, 27, 34, 0.95);
+            border-radius: 10px;
+            padding: 20px;
+            width: 300px;
+            box-shadow: 0 0 30px rgba(88, 166, 255, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
         }
-
-        ::-webkit-scrollbar-track {
-            background: #161b22;
+        
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(88, 166, 255, 0.3);
         }
-
-        ::-webkit-scrollbar-thumb {
-            background: #30363d;
-            border-radius: 4px;
+        
+        .blog-card img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
         }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #58a6ff;
+        
+        .blog-card h5 {
+            font-size: 0.9em;
+            margin: 10px 0;
+            /* color: #58a6ff; */
+            text-align: left;
         }
-
-        .glow {
-            text-shadow: 0 0 10px #58a6ff;
+        
+        .blog-card p {
+            font-size: 0.9em;
+            color: #8b949e;
+            line-height: 1.4;
+            text-align: left;
+        }
+        
+        .blog-card a {
+            color: #58a6ff;
+            text-decoration: none;
+            font-weight: bold;
+            text-align: left;
+        }
+        
+        .blog-card a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
     <canvas id="bg"></canvas>
+    <div class="blog-cards" id="blog-cards">
+        <h1 onclick="toggleTerminal()" class="glow">Medium Blogs</h1>
+        <div class="cards-container" id="cards-container">
+            <!-- Blog cards will be dynamically inserted here -->
+        </div>
+    </div>
     <div class="content">
         <h1 onclick="toggleTerminal()" class="glow">UJJWAL SAPKOTA (DevOps Engineer)</h1>
         <div class="tech-stack">
@@ -291,6 +329,7 @@
         const inputField = document.getElementById("input");
         const terminal = document.getElementById("terminal");
         const terminalContent = document.getElementById("terminal-content");
+        const blogCards = document.getElementById("blog-cards");
 
         let commandHistory = [];
         let historyIndex = -1;
@@ -409,9 +448,13 @@ Memory: 32GB Knowledge`,
         });
 
         function toggleTerminal() {
-            terminal.classList.toggle("active");
             if (terminal.classList.contains("active")) {
-                inputField.focus();
+                terminal.classList.remove("active");
+                blogCards.style.display = "block";
+                fetchMediumBlogs(); // Fetch blogs when switching to blog view
+            } else {
+                terminal.classList.add("active");
+                blogCards.style.display = "none";
             }
         }
 
@@ -427,6 +470,36 @@ Memory: 32GB Knowledge`,
         function maximizeTerminal() {
             terminal.style.width = "90%";
             terminal.style.height = "80vh";
+        }
+
+        // Fetch Medium blogs
+        async function fetchMediumBlogs() {
+            const mediumRSSFeed = "https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@ujjwalsapkota005";
+            const cardsContainer = document.getElementById("cards-container");
+
+            try {
+                const response = await fetch(mediumRSSFeed);
+                const data = await response.json();
+                const blogs = data.items;
+
+                // Clear existing cards
+                cardsContainer.innerHTML = "";
+
+                // Create and append blog cards
+                blogs.forEach(blog => {
+                    const card = document.createElement("div");
+                    card.className = "blog-card";
+                    card.innerHTML = `
+                        <h5>${blog.title}</h5>
+                        <p>${blog.description.substring(0, 100)}...</p>
+                        <a href="${blog.link}" target="_blank">Read More</a>
+                    `;
+                    cardsContainer.appendChild(card);
+                });
+            } catch (error) {
+                console.error("Error fetching Medium blogs:", error);
+                cardsContainer.innerHTML = `<div class="output-line error">Failed to load blogs. Please try again later.</div>`;
+            }
         }
 
         // Three.js background
@@ -478,12 +551,6 @@ Memory: 32GB Knowledge`,
 
         // Initialize terminal
         toggleTerminal();
-
-        function convertToASCII() {
-            let name = document.getElementById("nameInput").value;
-            let asciiValues = name.split('').map(char => char.charCodeAt(0)).join(' ');
-            document.getElementById("output").innerText = `ASCII: ${asciiValues}`;
-        }
     </script>
 </body>
 </html>
