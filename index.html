@@ -267,8 +267,15 @@
             right: 14px;
         }
 
+        .game{
+            color: white;
+        }
+
         .blog-card a:hover {
             text-decoration: underline;
+        }
+        .game-button{
+            z-index: 2 !important;
         }
     </style>
 </head>
@@ -281,6 +288,12 @@
         </div>
     </div>
     <div class="content">
+        <div class="game-button">
+              <a class="game" href="./tictac.html"> 
+                <i class="fas fa-gamepad"></i> Play Tic Tac Toe
+            </a>  
+            
+        </div>
         <h1 onclick="toggleContent(true)" class="glow">UJJWAL SAPKOTA (DevOps Engineer)</h1>
         <div class="tech-stack">
             <i class="fab fa-docker tech-icon" title="Docker"></i>
